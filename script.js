@@ -53,109 +53,177 @@ const DEPT_MAP = [
     displayName: "Mekanik CMY SCF 工務",
   },
   {
-    patterns: ["mekanik"],
+    patterns: ["mekanik", "kabag mekanik", "adm mekanik"],
     sheetKeyword: "Mekanik 工務", // D5
     displayName: "Mekanik 工務",
   },
   {
-    // Termasuk: IT, HRD, Finance, GA, Exim, Scrap, Kabag HR GA, Kabag Exim, dll.
     patterns: [
       "kabag hr-ga",
       "kabag hr ga",
       "kabag hr_ga",
-      "administrasi cmy",
-      "administrasi",
-      "admin cmy",
-      "admin",
+
+      "it",
+      "office boy",
+      "accounting",
+      "finance",
+      "general affair",
+      "ga",
+      "exim",
+      "scrap",
+      "hrd",
+      "driver",
+      "purchasing umum",
+      "purchasing administrasi",
+      "purchasing adm",
+
+      "kabag exim",
     ],
-    sheetKeyword: "管理部", // D4: "Administrasi 管理部"
+    sheetKeyword: "Administrasi", // D4
     displayName: "Administrasi 管理部",
   },
 
   // ── MPQ group ──────────────────────────────────────────────
   {
     patterns: ["ppic delivery", "ppic-delivery"],
-    sheetKeyword: "生管 出貨", // D9
+    sheetKeyword: "PPIC Delivery", // D9
     displayName: "PPIC Delivery 生管 出貨",
   },
   {
     patterns: ["ppic planning", "ppic plannnig", "ppic plan", "ppic"],
-    sheetKeyword: "生管 文件與", // D8
+    sheetKeyword: "PPIC Planning", // D8
     displayName: "PPIC Planning 生管 文件與",
   },
   {
     patterns: ["marketing"],
-    sheetKeyword: "業務", // D7
+    sheetKeyword: "Marketing", // D7
     displayName: "Marketing 業務",
   },
   {
     patterns: ["purchasing"],
-    sheetKeyword: "採購", // D10
+    sheetKeyword: "Purchasing", // D10
     displayName: "Purchasing 採購",
   },
   {
-    patterns: ["warehouse", "gudang", "wh"],
-    sheetKeyword: "倉庫", // D11
+    patterns: [
+      "warehouse",
+      "gudang",
+      "wh",
+      "kepala wh",
+      "kepala warehouse",
+      "kabag wh",
+      "kabag warehouse",
+      "adm wh",
+      "adm warehouse",
+      "admin warehouse",
+    ],
+    sheetKeyword: "Warehouse", // D11
     displayName: "Warehouse 倉庫",
   },
   {
-    patterns: ["qc", "quality control"],
-    sheetKeyword: "品管", // D12
+    patterns: [
+      "qc",
+      "quality control",
+
+      "qc finish good",
+      "assistant leader qc",
+      "qc belah kecil",
+      "qc cutting",
+      "qc printing",
+      "qc incoming",
+      "qc molded",
+      "qc laminating",
+      "qc laboratorium",
+      "qc belah besar",
+      "qc check claim",
+      "adm qc",
+    ],
+    sheetKeyword: "QC", // D12
     displayName: "QC 品管",
   },
 
   // ── Production ─────────────────────────────────────────────
   {
-    patterns: ["laminating"],
-    sheetKeyword: "貼合", // D13
+    patterns: [
+      "laminating",
+      "lamintaing",
+      "kepala shift laminating",
+      "kepala shift lamintaing",
+    ],
+    sheetKeyword: "Laminating", // D13
     displayName: "Laminating 貼合",
   },
   {
-    patterns: ["printing"],
-    sheetKeyword: "印刷", // D14
+    patterns: [
+      "printing",
+      "printong",
+      "leader line printing",
+      "leader line printong",
+      "adm printing",
+      "adm printong",
+    ],
+    sheetKeyword: "Printing", // D14
     displayName: "Printing 印刷",
   },
   {
-    patterns: ["mixing"],
-    sheetKeyword: "配色房", // D15
+    patterns: ["mixing", "mixong", "leader mixing", "leader mixong"],
+    sheetKeyword: "Mixing", // D15
     displayName: "Mixing 配色房",
   },
   {
     patterns: ["belah kecil"],
-    sheetKeyword: "小剖台", // D16
+    sheetKeyword: "Belah Kecil", // D16
     displayName: "Belah Kecil 小剖台",
   },
-  // Cutting Molded harus lebih dulu dari Cutting biasa
   {
-    patterns: ["cutting molded"],
-    sheetKeyword: "大料斬台", // D21
+    patterns: ["cutting molded", "leader line cutting molded"],
+    sheetKeyword: "Cutting Molded", // D21
     displayName: "Cutting Molded 大料斬台",
   },
   {
-    // "cutting" biasa → D17 "Cutting 斬台", bukan D21
-    patterns: ["cutting"],
+    patterns: [
+      "cutting",
+
+      "assistant kepala shift cutting",
+      "kepala shift cutting",
+      "leader line cutting",
+      "adm cutting",
+    ],
     sheetKeyword: "Cutting 斬台", // D17
     displayName: "Cutting 斬台",
   },
   {
     patterns: ["buffing"],
-    sheetKeyword: "打磨", // D18
+    sheetKeyword: "Buffing", // D18
     displayName: "Buffing 打磨",
   },
-  // Embos Automatic harus lebih dulu dari Embos biasa
+  {
+    patterns: [
+      "press molded",
+      "pres molded",
+      "leader line press molded",
+      "leader line pres molded",
+    ],
+    sheetKeyword: "Press Molded", // D22
+    displayName: "Press Molded 模壓",
+  },
+
+  // ── D23: Trimming + Embos Automatic + Packing Molded ──────
+  // PENTING: Semua pattern D23 harus pakai sheetKeyword YANG SAMA
+  // supaya tidak saling timpa saat dikirim ke spreadsheet.
+  // Gunakan "Packing Molded" sebagai keyword tunggal karena cell D23
+  // pasti mengandung teks tersebut.
   {
     patterns: ["embos automatic", "emboss automatic"],
-    sheetKeyword: "Packing Molded", // D23
+    sheetKeyword: "Packing Molded", // D23 ← FIX: dulu "Embos Automatic"
     displayName:
       "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
   },
   {
-    // "embos/emboss" biasa → D19, bukan D23
     patterns: ["embos", "emboss"],
     sheetKeyword: "Embos 轉印", // D19
     displayName: "Embos 轉印",
   },
-  // Packing Molded harus lebih dulu dari Packing biasa
   {
     patterns: ["packing molded"],
     sheetKeyword: "Packing Molded", // D23
@@ -164,39 +232,44 @@ const DEPT_MAP = [
   },
   {
     patterns: ["packing"],
-    sheetKeyword: "包裝", // D20 — D20 lebih dulu dari D23
+    sheetKeyword: "Packing 包裝", // D20
     displayName: "Packing 包裝",
   },
   {
-    patterns: ["trimming"],
-    sheetKeyword: "Trimming", // D23
+    patterns: ["trimming", "triming"],
+    sheetKeyword: "Packing Molded", // D23
     displayName:
       "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
   },
   {
-    patterns: ["press molded", "press"],
-    sheetKeyword: "Press Molded", // D22
-    displayName: "Press Molded 模壓",
+    patterns: ["leader line trimming", "leader line triming"],
+    sheetKeyword: "Packing Molded", // D23
+    displayName:
+      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
   },
-
-  // ── CMY & Development ──────────────────────────────────────
-  {
-    patterns: ["cmy scf", "cmyscf", "cmy"],
-    sheetKeyword: "超臨界泡沫", // D24
-    displayName: "CMY SCF 超臨界泡沫",
-  },
-  {
-    patterns: ["development", "pengembangan", "dev"],
-    sheetKeyword: "開發", // D25
-    displayName: "Development 開發",
-  },
-
-  // ── Fallback ───────────────────────────────────────────────
   {
     patterns: ["molded"],
     sheetKeyword: "Packing Molded", // D23
     displayName:
       "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
+  },
+  {
+    patterns: ["leader line bottom"],
+    sheetKeyword: "Packing Molded", // D23
+    displayName:
+      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
+  },
+
+  // ── CMY & Development ──────────────────────────────────────
+  {
+    patterns: ["cmy scf", "cmyscf", "cmy"],
+    sheetKeyword: "CMY SCF", // D24
+    displayName: "CMY SCF 超臨界泡沫",
+  },
+  {
+    patterns: ["development", "pengembangan", "dev"],
+    sheetKeyword: "Development", // D25
+    displayName: "Development 開發",
   },
 ];
 
@@ -216,7 +289,7 @@ function getDisplayName(keyword) {
   for (const entry of DEPT_MAP) {
     if (entry.sheetKeyword === keyword) return entry.displayName;
   }
-  return keyword; // fallback
+  return keyword;
 }
 
 /* ── DATE HELPER ── */
@@ -495,10 +568,9 @@ function exportExcel() {
 
 /* ── SPREADSHEET INTEGRATION ── */
 
-/** Hitung absent per dept dan mapping ke sheetKeyword */
 function computeSheetUpdates() {
-  const counts = {}; // sheetKeyword → { count, displayName, depts }
-  const unmatched = []; // dept names yang tidak bisa dimatch
+  const counts = {};
+  const unmatched = [];
 
   allRows
     .filter((r) => counted(r.status))
@@ -529,7 +601,6 @@ function computeSheetUpdates() {
   return { updates, unmatched };
 }
 
-/** Kirim ke spreadsheet — entry point */
 function kirimKeSpreadsheet() {
   const url = localStorage.getItem("appsScriptUrl");
   if (!url) {
@@ -556,7 +627,6 @@ function kirimKeSpreadsheet() {
   showPreviewModal(updates, unmatched);
 }
 
-/** Update tombol Kirim state */
 function updateKirimButton() {
   const btn = document.getElementById("btnKirim");
   const hasData = allRows.length > 0 && allRows.some((r) => counted(r.status));
@@ -624,7 +694,7 @@ function showPreviewModal(updates, unmatched) {
   document.getElementById(
     "previewDateInfo"
   ).innerHTML = `<i class="bi bi-calendar2-check" style="color:var(--cyan)"></i>
-     Data akan dikirim ke sheet <strong>MEI</strong>tanggal <strong>${date}</strong> — kolom G (Tidak Hadir)`;
+     Data akan dikirim ke sheet <strong>MEI</strong> tanggal <strong>${date}</strong> — kolom G (Tidak Hadir)`;
 
   const tbody = document.getElementById("previewTbody");
   tbody.innerHTML = updates
@@ -666,7 +736,7 @@ function closePreviewModal(e) {
   document.getElementById("previewModal").classList.remove("open");
 }
 
-/* ── JSONP helper — menghindari CORS dengan Apps Script ── */
+/* ── JSONP helper ── */
 function fetchJSONP(url) {
   return new Promise((resolve, reject) => {
     const cbName = "absensiCb_" + Date.now();
@@ -679,7 +749,6 @@ function fetchJSONP(url) {
         scriptEl.parentNode.removeChild(scriptEl);
     };
 
-    // Timeout 20 detik
     const timer = setTimeout(() => {
       if (settled) return;
       settled = true;
@@ -732,10 +801,8 @@ async function confirmSend() {
   const origHTML = btn.innerHTML;
 
   btn.innerHTML = '<i class="bi bi-arrow-repeat spin me-2"></i>MENGIRIM…';
-
   btn.disabled = true;
 
-  // Simpan lookup keyword → displayName untuk result modal
   window._keywordDisplayMap = {};
   updates.forEach((u) => {
     window._keywordDisplayMap[u.dept] = u.displayName;
@@ -753,12 +820,8 @@ async function confirmSend() {
 
   try {
     showToast("Mengirim data ke spreadsheet…", "info");
-
-    // PAKAI JSONP
     const json = await fetchJSONP(fullUrl);
-
     console.log(json);
-
     if (json.success) {
       showToast("Data berhasil dikirim!", "success");
       showResultModal(json.results, date);
@@ -834,7 +897,6 @@ function showToast(msg, type = "info") {
 /* ── INIT ── */
 window.addEventListener("DOMContentLoaded", () => {
   updateUrlStatus();
-  // Load saved date or use today
   if (!localStorage.getItem("targetDate")) {
     localStorage.setItem("targetDate", getTodayDateStr());
   }
