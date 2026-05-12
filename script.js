@@ -40,38 +40,8 @@ function animCount(el, to, dur = 650) {
   })(s);
 }
 
-/* ── DEPT MAP: attendance text → spreadsheet column D keyword ──
-   Urutan PENTING: yang lebih spesifik harus lebih dulu!
-   sheetKeyword = string unik yang ada di column D spreadsheet (sheet MEI).
-   Apps Script mencari column D yang mengandung sheetKeyword (cell.includes).
-
-   Pemetaan sesuai rumus SUMPRODUCT kolom E sheet MEI:
-     D4  Administrasi 管理部        ← IT, HRD, Finance, GA, Exim, Kabag HR GA, dst.
-     D5  Mekanik 工務               ← Mekanik, Kabag Mekanik, Adm Mekanik
-     D6  Mekanik CMY SCF工務        ← Mekanik CMY SCF
-     D7  Marketing 業務
-     D8  PPIC Plannning 生管 文件與
-     D9  PPIC Delivery 生管 出貨
-     D10 Purchasing 採購
-     D11 Warehouse 倉庫
-     D12 QC 品管
-     D13 Laminating 貼合
-     D14 Printing 印刷
-     D15 Mixing 配色房
-     D16 Belah Kecil 小剖台
-     D17 Cutting 斬台
-     D18 Buffing 打磨
-     D19 Embos 轉印
-     D20 Packing 包裝
-     D21 Cutting Molded 大料斬台
-     D22 Press Molded 模壓
-     D23 Trimming 修邊, Emboss Automatic 轉印, Packing Molded 包裝
-     D24 CMY SCF 超臨界泡沫
-     D25 Development 開發
-*/
 const DEPT_MAP = [
   // ── ADMINITRASI group ──────────────────────────────────────
-  // Mekanik CMY SCF harus lebih dulu dari "mekanik" biasa
   {
     patterns: [
       "mekanik cmy scf",
@@ -79,7 +49,7 @@ const DEPT_MAP = [
       "mekanik cmyscf",
       "mekanik cmy",
     ],
-    sheetKeyword: "Mekanik CMY",
+    sheetKeyword: "Mekanik CMY SCF", // D6
     displayName: "Mekanik CMY SCF 工務",
   },
   {
@@ -104,7 +74,7 @@ const DEPT_MAP = [
 
   // ── MPQ group ──────────────────────────────────────────────
   {
-    patterns: ["ppic delivery", "ppic del", "ppic-delivery"],
+    patterns: ["ppic delivery", "ppic-delivery"],
     sheetKeyword: "生管 出貨", // D9
     displayName: "PPIC Delivery 生管 出貨",
   },
@@ -119,7 +89,7 @@ const DEPT_MAP = [
     displayName: "Marketing 業務",
   },
   {
-    patterns: ["purchasing", "pembelian"],
+    patterns: ["purchasing"],
     sheetKeyword: "採購", // D10
     displayName: "Purchasing 採購",
   },
@@ -129,29 +99,29 @@ const DEPT_MAP = [
     displayName: "Warehouse 倉庫",
   },
   {
-    patterns: ["qc", "quality control", "quality"],
+    patterns: ["qc", "quality control"],
     sheetKeyword: "品管", // D12
     displayName: "QC 品管",
   },
 
   // ── Production ─────────────────────────────────────────────
   {
-    patterns: ["laminating", "laminasi", "laminating貼合"],
+    patterns: ["laminating"],
     sheetKeyword: "貼合", // D13
     displayName: "Laminating 貼合",
   },
   {
-    patterns: ["printing", "cetak"],
+    patterns: ["printing"],
     sheetKeyword: "印刷", // D14
     displayName: "Printing 印刷",
   },
   {
     patterns: ["mixing"],
-    sheetKeyword: "配色房", // D15 — sebelumnya tidak ada!
+    sheetKeyword: "配色房", // D15
     displayName: "Mixing 配色房",
   },
   {
-    patterns: ["belah kecil", "belah"],
+    patterns: ["belah kecil"],
     sheetKeyword: "小剖台", // D16
     displayName: "Belah Kecil 小剖台",
   },
@@ -164,41 +134,44 @@ const DEPT_MAP = [
   {
     // "cutting" biasa → D17 "Cutting 斬台", bukan D21
     patterns: ["cutting"],
-    sheetKeyword: "Cutting 斬台", // D17 — FIX: dulu salah ke "大料斬台" (D21)
+    sheetKeyword: "Cutting 斬台", // D17
     displayName: "Cutting 斬台",
   },
   {
     patterns: ["buffing"],
-    sheetKeyword: "打磨", // D18 — sebelumnya tidak ada!
+    sheetKeyword: "打磨", // D18
     displayName: "Buffing 打磨",
   },
   // Embos Automatic harus lebih dulu dari Embos biasa
   {
     patterns: ["embos automatic", "emboss automatic"],
-    sheetKeyword: "Packing Molded", // D23 — FIX: bukan D19
-    displayName: "Trimming 修邊, Embos Automatic 轉印, Packing Molded 包裝",
+    sheetKeyword: "Packing Molded", // D23
+    displayName:
+      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
   },
   {
     // "embos/emboss" biasa → D19, bukan D23
     patterns: ["embos", "emboss"],
-    sheetKeyword: "Embos 轉印", // D19 — FIX: dulu digabung ke D23
+    sheetKeyword: "Embos 轉印", // D19
     displayName: "Embos 轉印",
   },
   // Packing Molded harus lebih dulu dari Packing biasa
   {
     patterns: ["packing molded"],
-    sheetKeyword: "Packing Molded", // D23 — FIX: dulu "包裝" yang nyasar ke D20
-    displayName: "Trimming 修邊, Embos Automatic 轉印, Packing Molded 包裝",
+    sheetKeyword: "Packing Molded", // D23
+    displayName:
+      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
   },
   {
     patterns: ["packing"],
-    sheetKeyword: "包裝", // D20 "Packing 包裝" — D20 lebih dulu dari D23
+    sheetKeyword: "包裝", // D20 — D20 lebih dulu dari D23
     displayName: "Packing 包裝",
   },
   {
     patterns: ["trimming"],
-    sheetKeyword: "Trimming", // D23 — unik hanya di D23
-    displayName: "Trimming 修邊, Embos Automatic 轉印, Packing Molded 包裝",
+    sheetKeyword: "Trimming", // D23
+    displayName:
+      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
   },
   {
     patterns: ["press molded", "press"],
@@ -219,11 +192,11 @@ const DEPT_MAP = [
   },
 
   // ── Fallback ───────────────────────────────────────────────
-  // "molded" generik → D23 (Trimming/Embos Auto/Packing Molded)
   {
     patterns: ["molded"],
-    sheetKeyword: "Packing Molded", // D23 — FIX: dulu "包裝" yang nyasar ke D20
-    displayName: "Trimming 修邊, Embos Automatic 轉印, Packing Molded 包裝",
+    sheetKeyword: "Packing Molded", // D23
+    displayName:
+      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
   },
 ];
 
@@ -236,6 +209,14 @@ function getDeptEntry(deptName) {
     }
   }
   return null;
+}
+
+/** Cari displayName berdasarkan sheetKeyword (untuk result modal) */
+function getDisplayName(keyword) {
+  for (const entry of DEPT_MAP) {
+    if (entry.sheetKeyword === keyword) return entry.displayName;
+  }
+  return keyword; // fallback
 }
 
 /* ── DATE HELPER ── */
@@ -754,6 +735,12 @@ async function confirmSend() {
 
   btn.disabled = true;
 
+  // Simpan lookup keyword → displayName untuk result modal
+  window._keywordDisplayMap = {};
+  updates.forEach((u) => {
+    window._keywordDisplayMap[u.dept] = u.displayName;
+  });
+
   const payload = {
     date,
     updates: updates.map((u) => ({
@@ -793,11 +780,14 @@ function showResultModal(results, date) {
     "resultDateInfo"
   ).innerHTML = `<i class="bi bi-calendar2-check" style="color:var(--green)"></i> Hasil pengiriman data tanggal <strong>${date}</strong>`;
 
+  const displayMap = window._keywordDisplayMap || {};
+
   document.getElementById("resultItems").innerHTML = results
     .map((r) => {
+      const label = displayMap[r.dept] || getDisplayName(r.dept);
       if (r.status === "updated") {
         return `<div class="result-item result-ok">
-        <span><i class="bi bi-check-circle-fill me-2"></i>${r.dept}</span>
+        <span><i class="bi bi-check-circle-fill me-2"></i>${label}</span>
         <span>
           <span class="result-row-badge">Baris ${r.row}</span>
           &nbsp;<strong>${r.count}</strong> orang
@@ -805,7 +795,7 @@ function showResultModal(results, date) {
       </div>`;
       } else {
         return `<div class="result-item result-err">
-        <span><i class="bi bi-x-circle-fill me-2"></i>${r.dept}</span>
+        <span><i class="bi bi-x-circle-fill me-2"></i>${label}</span>
         <span style="font-size:10px; opacity:0.7">Tidak ditemukan di sheet</span>
       </div>`;
       }
