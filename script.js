@@ -624,7 +624,7 @@ function showPreviewModal(updates, unmatched) {
   document.getElementById(
     "previewDateInfo"
   ).innerHTML = `<i class="bi bi-calendar2-check" style="color:var(--cyan)"></i>
-     Data akan dikirim ke sheet <strong>MEI</strong> untuk tanggal <strong>${date}</strong> — kolom G (Tidak Hadir)`;
+     Data akan dikirim ke sheet <strong>MEI</strong>tanggal <strong>${date}</strong> — kolom G (Tidak Hadir)`;
 
   const tbody = document.getElementById("previewTbody");
   tbody.innerHTML = updates
