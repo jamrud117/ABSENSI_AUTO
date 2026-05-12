@@ -313,18 +313,38 @@ function normStatus(raw) {
     .replace(/\bizim\b/g, "izin")
     .replace(/\s+/g, " ")
     .trim();
+
   if (/izin.*pulang cepat|pulang cepat/.test(r)) return "IZIN_PULANG_CEPAT";
+
   if (/\b(sudah masuk|sudah hadir|sudah datang)\b/.test(r)) {
     if (/izin.*siang/.test(r)) return "IZIN_SIANG";
-    if (/terlambat/.test(r)) return "IZIN_TERLAMBAT";
+
+    // Tambahan: izin datang terlambat
+    if (
+      /izin.*(terlambat|datang terlambat)/.test(r) ||
+      /(terlambat|datang terlambat)/.test(r)
+    ) {
+      return "IZIN_TERLAMBAT";
+    }
+
     return "MASUK";
   }
+
   if (/\balfa\b/.test(r)) return "ALFA";
   if (/\bsakit\b/.test(r)) return "SAKIT";
   if (/\bcuti\b/.test(r)) return "CUTI";
+
   if (/izin.*siang/.test(r)) return "IZIN_SIANG";
-  if (/izin.*terlambat|terlambat/.test(r)) return "IZIN_TERLAMBAT";
+
+  if (
+    /izin.*(terlambat|datang terlambat)/.test(r) ||
+    /(terlambat|datang terlambat)/.test(r)
+  ) {
+    return "IZIN_TERLAMBAT";
+  }
+
   if (/\bizin\b/.test(r) || /tidak masuk/.test(r)) return "IZIN_TIDAK_MASUK";
+
   return "LAIN";
 }
 
