@@ -399,6 +399,16 @@ function parse(text) {
       }
       continue;
     }
+
+    // ✅ FIX: Baris tanpa tanda kurung = header bagian → flush buffer
+    if (!/\(/.test(t) && !/^\s*\d+\./.test(t)) {
+      if (buffer.length) {
+        processBuffer(buffer.join(" "));
+        buffer = [];
+      }
+      continue; // ← jangan push ke buffer
+    }
+
     if (/^\s*\d+\./.test(t)) {
       if (buffer.length) processBuffer(buffer.join(" "));
       buffer = [t];
