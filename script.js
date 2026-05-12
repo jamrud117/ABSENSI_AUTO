@@ -65,6 +65,7 @@ const DEPT_MAP = [
 
       "it",
       "office boy",
+      "officeboy",
       "ob",
       "accounting",
       "finance",
