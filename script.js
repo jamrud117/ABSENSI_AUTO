@@ -305,34 +305,25 @@ const DEPT_MAP = [
   },
 ];
 
-function getDeptEntry(deptName) {
-  if (!deptName) return null;
-
+function getDeptEntry(deptName = "") {
   const lower = deptName.toLowerCase().trim();
 
-  for (const entry of DEPT_MAP) {
-    // cek exclude dulu
-    if (entry.exclude && entry.exclude.some((ex) => lower.includes(ex))) {
-      continue;
-    }
+  return (
+    DEPT_MAP.find((entry) => {
+      const excluded = entry.exclude?.some((ex) => lower.includes(ex));
 
-    // cek patterns
-    for (const pat of entry.patterns) {
-      if (lower.includes(pat)) {
-        return entry;
-      }
-    }
-  }
+      if (excluded) return false;
 
-  return null;
+      return entry.patterns.some((pat) => lower.includes(pat));
+    }) || null
+  );
 }
 
 /** Cari displayName berdasarkan sheetKeyword (untuk result modal) */
 function getDisplayName(keyword) {
-  for (const entry of DEPT_MAP) {
-    if (entry.sheetKeyword === keyword) return entry.displayName;
-  }
-  return keyword;
+  return (
+    DEPT_MAP.find((e) => e.sheetKeyword === keyword)?.displayName || keyword
+  );
 }
 
 /* ── GET DEPARTMENT DISPLAY ── */
@@ -363,7 +354,7 @@ const DEPT_ORDER = {
 
   "Marketing 業務": 4,
 
-  "PPIC Plannning 生管 文件與": 5,
+  "PPIC Planning 生管 文件與": 5,
   "PPIC Delivery 生管 出貨": 6,
 
   "Purchasing 採購": 7,
@@ -393,32 +384,30 @@ const DEPT_ORDER = {
 };
 
 function normStatus(raw) {
-  let r = raw
+  const r = raw
     .toLowerCase()
     .replace(/\bizim\b/g, "izin")
     .replace(/\s+/g, " ")
     .trim();
 
+  const hasMasuk = /\b(sudah masuk|sudah hadir|sudah datang)\b/.test(r);
+
+  const isIzinSiang = /izin.*siang|masuk siang/.test(r);
+
+  const isTerlambat =
+    /izin.*(terlambat|datang terlambat)|(terlambat|datang terlambat)/.test(r);
+
   if (/izin.*pulang cepat|pulang cepat/.test(r)) {
     return "IZIN_PULANG_CEPAT";
   }
 
-  // IZIN MASUK SIANG
-  if (/izin.*masuk siang/.test(r) || /masuk siang/.test(r)) {
+  if (/izin.*masuk siang|masuk siang/.test(r)) {
     return "IZIN_MASUK_SIANG";
   }
 
-  if (/\b(sudah masuk|sudah hadir|sudah datang)\b/.test(r)) {
-    if (/izin.*siang/.test(r)) return "IZIN_SIANG";
-
-    // Tambahan: izin datang terlambat
-    if (
-      /izin.*(terlambat|datang terlambat)/.test(r) ||
-      /(terlambat|datang terlambat)/.test(r)
-    ) {
-      return "IZIN_TERLAMBAT";
-    }
-
+  if (hasMasuk) {
+    if (isIzinSiang) return "IZIN_SIANG";
+    if (isTerlambat) return "IZIN_TERLAMBAT";
     return "MASUK";
   }
 
@@ -426,32 +415,26 @@ function normStatus(raw) {
   if (/\bsakit\b/.test(r)) return "SAKIT";
   if (/\bcuti\b/.test(r)) return "CUTI";
 
-  if (/izin.*siang/.test(r)) return "IZIN_SIANG";
+  if (isIzinSiang) return "IZIN_SIANG";
+  if (isTerlambat) return "IZIN_TERLAMBAT";
 
-  if (
-    /izin.*(terlambat|datang terlambat)/.test(r) ||
-    /(terlambat|datang terlambat)/.test(r)
-  ) {
-    return "IZIN_TERLAMBAT";
-  }
-
-  if (/\bizin\b/.test(r) || /tidak masuk/.test(r)) {
+  if (/\bizin\b|tidak masuk/.test(r)) {
     return "IZIN_TIDAK_MASUK";
   }
 
   return "LAIN";
 }
 
-function counted(s) {
-  const notCounted = [
-    "MASUK",
-    "IZIN_SIANG",
-    "IZIN_TERLAMBAT",
-    "IZIN_PULANG_CEPAT",
-    "IZIN_MASUK_SIANG",
-  ];
+const NOT_COUNTED = new Set([
+  "MASUK",
+  "IZIN_SIANG",
+  "IZIN_TERLAMBAT",
+  "IZIN_PULANG_CEPAT",
+  "IZIN_MASUK_SIANG",
+]);
 
-  return !notCounted.includes(s);
+function counted(status) {
+  return !NOT_COUNTED.has(status);
 }
 
 function parse(text) {
@@ -574,18 +557,18 @@ function renderSummary(rows) {
     .join("");
 }
 
+const SEARCH_LABELS = {
+  SAKIT: "sakit",
+  ALFA: "alfa",
+  CUTI: "cuti",
+  IZIN_SIANG: "izin masuk siang",
+  IZIN_TERLAMBAT: "izin terlambat",
+  IZIN_LAIN: "izin",
+  IZIN_TIDAK_MASUK: "izin tidak masuk",
+};
+
 function searchLabel(status, raw) {
-  const labels = {
-    SAKIT: "sakit",
-    ALFA: "alfa",
-    CUTI: "cuti",
-    IZIN_SIANG: "izin masuk siang",
-    IZIN_TERLAMBAT: "izin terlambat",
-    IZIN_LAIN: "izin",
-    IZIN_TIDAK_MASUK: "izin tidak masuk",
-    LAIN: raw,
-  };
-  return (labels[status] || raw).toLowerCase();
+  return (SEARCH_LABELS[status] || raw).toLowerCase();
 }
 
 function renderTable(rows, q = "") {
@@ -618,7 +601,7 @@ function renderTable(rows, q = "") {
     });
   });
   if (!f.length) {
-    body.innerHTML = `<tr><td colspan="4"><div class="empty-ph">
+    body.innerHTML = `<tr><td colspan="6"><div class="empty-ph">
       <i class="bi bi-person-x"></i>
       <p>${
         rows.length
@@ -637,9 +620,10 @@ function renderTable(rows, q = "") {
         <div class="emp-name">${r.name}</div>
       </td>
       <td>
-        <div class="emp-dept">${
-          r.dept || '<span style="color:var(--txt3)">—</span>'
-        }</div>
+        <div class="emp-dept">
+          ${r.dept || '<span style="color:var(--txt3)">—</span>'}
+        </div>
+      </td>
 
       <td>
         <div class="emp-dept">
@@ -804,9 +788,8 @@ function updateKirimButton() {
 /* ── CONFIG MODAL ── */
 function showConfigModal() {
   const savedUrl = localStorage.getItem("appsScriptUrl") || "";
-  const savedDate = localStorage.getItem("targetDate") || getTodayDateStr();
+  document.getElementById("targetDateInput").value = getTodayDateStr();
   document.getElementById("appsScriptUrlInput").value = savedUrl;
-  document.getElementById("targetDateInput").value = savedDate;
   document.getElementById("configModal").classList.add("open");
 }
 
@@ -831,7 +814,6 @@ function saveConfig() {
     return;
   }
   localStorage.setItem("appsScriptUrl", url);
-  if (date) localStorage.setItem("targetDate", date);
   updateUrlStatus();
   document.getElementById("configModal").classList.remove("open");
   showToast("Konfigurasi disimpan!", "success");
@@ -855,7 +837,7 @@ function updateUrlStatus() {
 
 /* ── PREVIEW MODAL ── */
 function showPreviewModal(updates, unmatched) {
-  const date = localStorage.getItem("targetDate") || getTodayDateStr();
+  const date = getTodayDateStr();
 
   document.getElementById("previewDateInfo").innerHTML =
     `<i class="bi bi-calendar2-check" style="color:var(--cyan)"></i>
@@ -1061,8 +1043,5 @@ function showToast(msg, type = "info") {
 /* ── INIT ── */
 window.addEventListener("DOMContentLoaded", () => {
   updateUrlStatus();
-  if (!localStorage.getItem("targetDate")) {
-    localStorage.setItem("targetDate", getTodayDateStr());
-  }
   prosesData();
 });

@@ -266,14 +266,18 @@ body::after {
     border-color 0.25s,
     box-shadow 0.25s;
   overflow: hidden;
+  flex: 1;
+  min-height: 280px;
+  max-height: 520px;
 }
 .textarea-wrap:focus-within {
   border-color: rgba(176, 64, 255, 0.55);
   box-shadow: 0 0 28px rgba(176, 64, 255, 0.14);
 }
 #inputText {
+  height: 100%;
   width: 100%;
-  min-height: 275px;
+  min-height: 0;
   background: transparent;
   border: none;
   outline: none;
@@ -282,7 +286,7 @@ body::after {
   font-size: 12.5px;
   line-height: 1.75;
   padding: 16px;
-  resize: vertical;
+  resize: none;
   caret-color: var(--cyan);
 }
 #inputText::placeholder {
@@ -575,8 +579,10 @@ body::after {
   gap: 10px;
   color: var(--txt3);
   padding: 32px;
+  min-height: 360px;
   width: 100%;
 }
+
 .empty-ph i {
   font-size: 2rem;
   opacity: 0.25;
@@ -736,11 +742,7 @@ body::after {
   overflow: auto;
   max-height: 585px;
 }
-@media (max-height: 1100px) {
-  .tbl-scroll {
-    max-height: 310px;
-  }
-}
+
 table.atbl {
   width: 100%;
   border-collapse: collapse;
@@ -1352,6 +1354,15 @@ table.preview-tbl td:last-child {
 @media (max-width: 1199px) {
   .brand-title {
     font-size: 1rem;
+  }
+}
+
+@media (max-height: 1100px) {
+  .tbl-scroll {
+    max-height: 310px;
+  }
+  .empty-ph {
+    min-height: 220px;
   }
 }
 
