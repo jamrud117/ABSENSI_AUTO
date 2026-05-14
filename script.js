@@ -335,6 +335,14 @@ function getDisplayName(keyword) {
   return keyword;
 }
 
+/* ── GET DEPARTMENT DISPLAY ── */
+function getDepartmentName(deptName) {
+  const entry = getDeptEntry(deptName);
+
+  if (!entry) return "Lainnya";
+  return entry.displayName;
+}
+
 /* ── DATE HELPER ── */
 function getTodayDateStr() {
   const d = new Date();
@@ -347,6 +355,42 @@ function getTodayDateStr() {
 
 /* ── PARSER ── */
 let allRows = [];
+/* ── DEPARTMENT ORDER ── */
+const DEPT_ORDER = {
+  "Administrasi 管理部": 1,
+  "Mekanik 工務": 2,
+  "Mekanik CMY SCF 工務": 3,
+
+  "Marketing 業務": 4,
+
+  "PPIC Plannning 生管 文件與": 5,
+  "PPIC Delivery 生管 出貨": 6,
+
+  "Purchasing 採購": 7,
+  "Warehouse 倉庫": 8,
+  "QC 品管": 9,
+
+  "Laminating 貼合": 10,
+  "Printing 印刷": 11,
+  "Mixing 配色房": 12,
+  "Belah Kecil 小剖台": 13,
+  "Cutting 斬台": 14,
+  "Buffing 打磨": 15,
+  "Embos 轉印": 16,
+  "Packing 包裝": 17,
+
+  "Cutting Molded 大料斬台": 18,
+  "Press Molded 模壓": 19,
+
+  "Trimming 修邊, Embos Automatic 轉印, Packing Molded 包裝": 20,
+
+  "CMY SCF 超臨界泡沫": 21,
+  "Development 開發": 22,
+
+  "Tes Lapangan 現場測試員工": 23,
+
+  Lainnya: 999,
+};
 
 function normStatus(raw) {
   let r = raw
@@ -438,7 +482,13 @@ function parse(text) {
     if (!name) return;
     const status = normStatus(sRaw);
     if (status === "MASUK") return;
-    rows.push({ name, dept, sRaw, status });
+    rows.push({
+      name,
+      dept,
+      department: getDepartmentName(dept),
+      sRaw,
+      status,
+    });
   }
 
   for (let line of lines) {
@@ -519,7 +569,7 @@ function renderSummary(rows) {
         <div class="dept-name">${d}</div>
         <div class="dept-num">${n}</div>
         <div class="dept-lbl">Tidak Hadir</div>
-      </div>`
+      </div>`,
     )
     .join("");
 }
@@ -546,12 +596,27 @@ function renderTable(rows, q = "") {
         return (
           r.name.toLowerCase().includes(kw) ||
           r.dept.toLowerCase().includes(kw) ||
+          r.department.toLowerCase().includes(kw) ||
           r.status.toLowerCase().includes(kw) ||
           r.sRaw.toLowerCase().includes(kw) ||
           searchLabel(r.status, r.sRaw).includes(kw)
         );
       })
     : rows;
+  f.sort((a, b) => {
+    const orderA = DEPT_ORDER[a.department] || 999;
+    const orderB = DEPT_ORDER[b.department] || 999;
+
+    // sort berdasarkan urutan custom
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+
+    // kalau department sama → sort nama
+    return a.name.localeCompare(b.name, "id", {
+      sensitivity: "base",
+    });
+  });
   if (!f.length) {
     body.innerHTML = `<tr><td colspan="4"><div class="empty-ph">
       <i class="bi bi-person-x"></i>
@@ -568,10 +633,20 @@ function renderTable(rows, q = "") {
       (r, i) => `
     <tr class="row-fade" style="animation-delay:${i * 28}ms">
       <td><span class="row-num">${i + 1}</span></td>
-      <td><div class="emp-name">${r.name}</div></td>
-      <td><div class="emp-dept">${
-        r.dept || '<span style="color:var(--txt3)">—</span>'
-      }</div></td>
+      <td>
+        <div class="emp-name">${r.name}</div>
+      </td>
+      <td>
+        <div class="emp-dept">${
+          r.dept || '<span style="color:var(--txt3)">—</span>'
+        }</div>
+
+      <td>
+        <div class="emp-dept">
+          ${r.department || '<span style="color:var(--txt3)">—</span>'}
+        </div>
+      </td>
+      </td>
       <td><div class="td-badge">
         ${badge(r.status, r.sRaw)}
         ${
@@ -580,7 +655,7 @@ function renderTable(rows, q = "") {
             : ""
         }
       </div></td>
-    </tr>`
+    </tr>`,
     )
     .join("");
 }
@@ -606,7 +681,7 @@ function bersihkan() {
   document.getElementById("searchBox").value = "";
   allRows = [];
   ["statAbsen", "statBagian", "statTotal"].forEach((id) =>
-    animCount(document.getElementById(id), 0, 300)
+    animCount(document.getElementById(id), 0, 300),
   );
   renderSummary([]);
   renderTable([]);
@@ -626,6 +701,7 @@ function exportExcel() {
     No: i + 1,
     Nama: r.name,
     Bagian: r.dept,
+    Departemen: r.department,
     Keterangan: r.sRaw,
     Dihitung: counted(r.status) ? "Ya" : "Tidak",
   }));
@@ -638,15 +714,15 @@ function exportExcel() {
       wb,
       `absensi_${d.getFullYear()}${String(d.getMonth() + 1).padStart(
         2,
-        "0"
-      )}${String(d.getDate()).padStart(2, "0")}.xlsx`
+        "0",
+      )}${String(d.getDate()).padStart(2, "0")}.xlsx`,
     );
   } catch (e) {
     const csv = [
       "No,Nama,Bagian,Keterangan,Dihitung",
       ...data.map(
         (r) =>
-          `${r.No},"${r.Nama}","${r.Bagian}","${r.Keterangan}","${r.Dihitung}"`
+          `${r.No},"${r.Nama}","${r.Bagian}","${r.Keterangan}","${r.Dihitung}"`,
       ),
     ].join("\n");
     const a = document.createElement("a");
@@ -701,7 +777,7 @@ function kirimKeSpreadsheet() {
   if (!allRows.length) {
     showToast(
       "Tidak ada data. Proses text absensi terlebih dahulu.",
-      "warning"
+      "warning",
     );
     return;
   }
@@ -710,7 +786,7 @@ function kirimKeSpreadsheet() {
   if (!updates.length) {
     showToast(
       "Tidak ada karyawan yang dihitung sebagai tidak hadir.",
-      "warning"
+      "warning",
     );
     return;
   }
@@ -781,9 +857,8 @@ function updateUrlStatus() {
 function showPreviewModal(updates, unmatched) {
   const date = localStorage.getItem("targetDate") || getTodayDateStr();
 
-  document.getElementById(
-    "previewDateInfo"
-  ).innerHTML = `<i class="bi bi-calendar2-check" style="color:var(--cyan)"></i>
+  document.getElementById("previewDateInfo").innerHTML =
+    `<i class="bi bi-calendar2-check" style="color:var(--cyan)"></i>
      Data akan dikirim ke sheet <strong>MEI</strong> tanggal <strong>${date}</strong> — kolom G (Tidak Hadir)`;
 
   const tbody = document.getElementById("previewTbody");
@@ -794,11 +869,11 @@ function showPreviewModal(updates, unmatched) {
       <td>
         ${u.displayName}
         <span class="preview-dept-key" style="color:var(--txt3)">Dari: ${u.sourceNames.join(
-          ", "
+          ", ",
         )}</span>
       </td>
       <td>${u.count}</td>
-    </tr>`
+    </tr>`,
     )
     .join("");
 
@@ -844,8 +919,8 @@ function fetchJSONP(url) {
       cleanup();
       reject(
         new Error(
-          "Timeout (20 detik) — Apps Script tidak merespons. Coba lagi."
-        )
+          "Timeout (20 detik) — Apps Script tidak merespons. Coba lagi.",
+        ),
       );
     }, 20000);
 
@@ -866,8 +941,8 @@ function fetchJSONP(url) {
       cleanup();
       reject(
         new Error(
-          "Gagal memuat script Apps Script. Pastikan URL benar dan sudah di-deploy."
-        )
+          "Gagal memuat script Apps Script. Pastikan URL benar dan sudah di-deploy.",
+        ),
       );
     };
     document.head.appendChild(scriptEl);
@@ -899,6 +974,7 @@ async function confirmSend() {
 
   const payload = {
     date,
+    clearFirst: true,
     updates: updates.map((u) => ({
       dept: u.dept,
       count: u.count,
@@ -928,9 +1004,8 @@ async function confirmSend() {
 
 /* ── RESULT MODAL ── */
 function showResultModal(results, date) {
-  document.getElementById(
-    "resultDateInfo"
-  ).innerHTML = `<i class="bi bi-calendar2-check" style="color:var(--green)"></i> Hasil pengiriman data tanggal <strong>${date}</strong>`;
+  document.getElementById("resultDateInfo").innerHTML =
+    `<i class="bi bi-calendar2-check" style="color:var(--green)"></i> Hasil pengiriman data tanggal <strong>${date}</strong>`;
 
   const displayMap = window._keywordDisplayMap || {};
 
