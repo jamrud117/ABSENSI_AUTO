@@ -42,10 +42,8 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: linear-gradient(
-      rgba(176, 64, 255, 0.03) 1px,
-      transparent 1px
-    ),
+  background-image:
+    linear-gradient(rgba(176, 64, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(176, 64, 255, 0.03) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
@@ -264,7 +262,9 @@ body::after {
   border: 1px solid rgba(176, 64, 255, 0.22);
   border-radius: 10px;
   background: var(--navy3);
-  transition: border-color 0.25s, box-shadow 0.25s;
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s;
   overflow: hidden;
 }
 .textarea-wrap:focus-within {
@@ -325,7 +325,10 @@ body::after {
   color: #fff;
   cursor: pointer;
   overflow: hidden;
-  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    opacity 0.15s;
   box-shadow: 0 4px 24px rgba(176, 64, 255, 0.35);
 }
 .btn-proses::after {
@@ -367,7 +370,10 @@ body::after {
   letter-spacing: 3px;
   color: var(--txt3);
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    background 0.2s;
 }
 .btn-clear:hover {
   border-color: var(--coral);
@@ -389,7 +395,9 @@ body::after {
   text-align: center;
   position: relative;
   overflow: hidden;
-  transition: border-color 0.2s, transform 0.2s;
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
 }
 .stat-card:hover {
   border-color: var(--borderH);
@@ -502,7 +510,10 @@ body::after {
   padding: 12px 14px;
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
   animation: slideIn 0.35s ease both;
 }
 @keyframes slideIn {
@@ -607,7 +618,9 @@ body::after {
   padding: 8px 12px 8px 34px;
   width: 220px;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 #searchBox:focus {
   border-color: rgba(176, 64, 255, 0.45);
@@ -629,7 +642,10 @@ body::after {
   color: var(--green);
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 .btn-export:hover {
   background: rgba(45, 255, 158, 0.08);
@@ -657,7 +673,11 @@ body::after {
   color: var(--violet);
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s,
+    opacity 0.2s;
   position: relative;
   overflow: hidden;
 }
@@ -702,7 +722,9 @@ body::after {
   color: var(--txt3);
   cursor: pointer;
   font-size: 0.85rem;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 }
 .btn-config-gear:hover {
   border-color: var(--borderH);
@@ -712,7 +734,12 @@ body::after {
 /* ── TABLE ── */
 .tbl-scroll {
   overflow: auto;
-  max-height: 430px;
+  max-height: 585px;
+}
+@media (max-height: 1100px) {
+  .tbl-scroll {
+    max-height: 310px;
+  }
 }
 table.atbl {
   width: 100%;
@@ -922,7 +949,9 @@ table.atbl td:first-child {
   color: var(--txt3);
   cursor: pointer;
   font-size: 0.75rem;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 }
 .modal-close:hover {
   border-color: var(--coral);
@@ -958,7 +987,9 @@ table.atbl td:first-child {
   font-size: 12px;
   padding: 10px 14px;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   color-scheme: dark;
 }
 .form-group input:focus {
@@ -1068,7 +1099,9 @@ table.atbl td:first-child {
   letter-spacing: 2px;
   color: var(--violet);
   cursor: pointer;
-  transition: box-shadow 0.2s, border-color 0.2s;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1090,7 +1123,9 @@ table.atbl td:first-child {
   letter-spacing: 2px;
   color: var(--txt3);
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 }
 .btn-cancel-config:hover {
   border-color: var(--coral);
@@ -1419,10 +1454,10 @@ table.preview-tbl td:last-child {
 .footer {
   background: var(--navy2);
   border-top: 1px solid var(--border);
-  padding: 14px 28px;
+  padding: 25px 28px;
   text-align: center;
   font-family: var(--f-mono);
-  font-size: 10.5px;
+  font-size: 14px;
   color: var(--txt3);
   letter-spacing: 0.5px;
 }
