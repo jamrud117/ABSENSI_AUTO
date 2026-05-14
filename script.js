@@ -55,7 +55,7 @@ const DEPT_MAP = [
       "adm mekanik cmy",
       "mekanik scf",
     ],
-    sheetKeyword: "Mekanik CMY SCF",
+    sheetKeyword: "Mekanik CMY SCF 工務",
     displayName: "Mekanik CMY SCF 工務",
   },
 
@@ -90,7 +90,7 @@ const DEPT_MAP = [
       "purchasing adm",
       "kabag exim",
     ],
-    sheetKeyword: "Administrasi",
+    sheetKeyword: "Administrasi 管理部",
     displayName: "Administrasi 管理部",
   },
 
@@ -100,25 +100,25 @@ const DEPT_MAP = [
 
   {
     patterns: ["ppic delivery", "ppic-delivery"],
-    sheetKeyword: "PPIC Delivery",
+    sheetKeyword: "PPIC Delivery 生管 出貨",
     displayName: "PPIC Delivery 生管 出貨",
   },
 
   {
     patterns: ["ppic planning", "ppic plannnig", "ppic plan"],
-    sheetKeyword: "PPIC Planning",
+    sheetKeyword: "PPIC Planning 生管 文件與",
     displayName: "PPIC Planning 生管 文件與",
   },
 
   {
     patterns: ["marketing"],
-    sheetKeyword: "Marketing",
+    sheetKeyword: "Marketing 業務",
     displayName: "Marketing 業務",
   },
 
   {
     patterns: ["purchasing"],
-    sheetKeyword: "Purchasing",
+    sheetKeyword: "Purchasing 採購",
     displayName: "Purchasing 採購",
   },
 
@@ -135,7 +135,7 @@ const DEPT_MAP = [
       "adm warehouse",
       "admin warehouse",
     ],
-    sheetKeyword: "Warehouse",
+    sheetKeyword: "Warehouse 倉庫",
     displayName: "Warehouse 倉庫",
   },
 
@@ -145,6 +145,7 @@ const DEPT_MAP = [
       "quality control",
       "qc finish good",
       "assistant leader qc",
+      "asisten leader qc",
       "qc belah kecil",
       "qc cutting",
       "qc printing",
@@ -156,7 +157,7 @@ const DEPT_MAP = [
       "qc check claim",
       "adm qc",
     ],
-    sheetKeyword: "QC",
+    sheetKeyword: "QC 品管",
     displayName: "QC 品管",
   },
 
@@ -171,7 +172,7 @@ const DEPT_MAP = [
       "kepala shift laminating",
       "kepala shift lamintaing",
     ],
-    sheetKeyword: "Laminating",
+    sheetKeyword: "Laminating 貼合",
     displayName: "Laminating 貼合",
   },
 
@@ -184,38 +185,50 @@ const DEPT_MAP = [
       "adm printing",
       "adm printong",
     ],
-    sheetKeyword: "Printing",
+    sheetKeyword: "Printing 印刷",
     displayName: "Printing 印刷",
   },
 
   {
     patterns: ["mixing", "mixong", "leader mixing", "leader mixong"],
-    sheetKeyword: "Mixing",
+    sheetKeyword: "Mixing 配色房",
     displayName: "Mixing 配色房",
   },
 
   {
-    patterns: ["belah kecil"],
-    sheetKeyword: "Belah Kecil",
+    patterns: [
+      "belah kecil",
+      "kepala shift belah kecil",
+      "assistant kepala shift belah kecil",
+      "asisten kepala shift belah kecil",
+      "leader line belah kecil",
+    ],
+    sheetKeyword: "Belah Kecil 小剖台",
     displayName: "Belah Kecil 小剖台",
   },
 
   {
     patterns: [
+      "kepala molded",
+      "assistant kepala molded",
+      "asisten kepala molded",
+      "kepala shift molded",
+      "assistant kepala shift molded",
+      "asisten kepala shift molded",
       "cutting molded",
       "leader line cutting molded",
       "assistant kepala shift molded",
       "asisten kepala shift molded",
       "adm molded",
-      "kepala shift molded",
     ],
-    sheetKeyword: "Cutting Molded",
+    sheetKeyword: "Cutting Molded 大料斬台",
     displayName: "Cutting Molded 大料斬台",
   },
 
   {
     patterns: [
       "assistant kepala shift cutting",
+      "asisten kepala shift cutting",
       "kepala shift cutting",
       "leader line cutting",
       "adm cutting",
@@ -227,7 +240,7 @@ const DEPT_MAP = [
 
   {
     patterns: ["buffing"],
-    sheetKeyword: "Buffing",
+    sheetKeyword: "Buffing 打磨",
     displayName: "Buffing 打磨",
   },
 
@@ -238,7 +251,7 @@ const DEPT_MAP = [
       "leader line press molded",
       "leader line pres molded",
     ],
-    sheetKeyword: "Press Molded",
+    sheetKeyword: "Press Molded 模壓",
     displayName: "Press Molded 模壓",
   },
 
@@ -253,7 +266,6 @@ const DEPT_MAP = [
       "embos automatic",
       "emboss automatic",
       "leader line bottom",
-      "molded",
     ],
     exclude: ["press molded", "cutting molded"],
     sheetKeyword: "Trimming",
@@ -288,7 +300,7 @@ const DEPT_MAP = [
 
   {
     patterns: ["development", "pengembangan", "dev"],
-    sheetKeyword: "Development",
+    sheetKeyword: "Development 開發",
     displayName: "Development 開發",
   },
 ];
@@ -781,7 +793,6 @@ function showPreviewModal(updates, unmatched) {
     <tr>
       <td>
         ${u.displayName}
-        <span class="preview-dept-key">Keyword: "${u.dept}"</span>
         <span class="preview-dept-key" style="color:var(--txt3)">Dari: ${u.sourceNames.join(
           ", "
         )}</span>
