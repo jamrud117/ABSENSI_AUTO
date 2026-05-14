@@ -41,28 +41,38 @@ function animCount(el, to, dur = 650) {
 }
 
 const DEPT_MAP = [
-  // ── ADMINITRASI group ──────────────────────────────────────
+  /* =========================================================
+   * ADMINISTRASI
+   * =======================================================*/
+
+  // ── Mekanik CMY SCF ──────────────────────────────────────
   {
     patterns: [
       "mekanik cmy scf",
       "mekonik cmy scf",
       "mekanik cmyscf",
       "mekanik cmy",
+      "adm mekanik cmy",
+      "mekanik scf",
     ],
-    sheetKeyword: "Mekanik CMY SCF", // D6
+    sheetKeyword: "Mekanik CMY SCF",
     displayName: "Mekanik CMY SCF 工務",
   },
+
+  // ── Mekanik umum ─────────────────────────────────────────
   {
-    patterns: ["mekanik", "kabag mekanik", "adm mekanik"],
-    sheetKeyword: "Mekanik 工務", // D5
+    patterns: ["kabag mekanik", "adm mekanik", "mekanik"],
+    exclude: ["cmy"], // ← penting
+    sheetKeyword: "Mekanik 工務",
     displayName: "Mekanik 工務",
   },
+
+  // ── Administrasi ─────────────────────────────────────────
   {
     patterns: [
       "kabag hr-ga",
       "kabag hr ga",
       "kabag hr_ga",
-
       "it",
       "office boy",
       "officeboy",
@@ -78,34 +88,40 @@ const DEPT_MAP = [
       "purchasing umum",
       "purchasing administrasi",
       "purchasing adm",
-
       "kabag exim",
     ],
-    sheetKeyword: "Administrasi", // D4
+    sheetKeyword: "Administrasi",
     displayName: "Administrasi 管理部",
   },
 
-  // ── MPQ group ──────────────────────────────────────────────
+  /* =========================================================
+   * MPQ
+   * =======================================================*/
+
   {
     patterns: ["ppic delivery", "ppic-delivery"],
-    sheetKeyword: "PPIC Delivery", // D9
+    sheetKeyword: "PPIC Delivery",
     displayName: "PPIC Delivery 生管 出貨",
   },
+
   {
-    patterns: ["ppic planning", "ppic plannnig", "ppic plan", "ppic"],
-    sheetKeyword: "PPIC Planning", // D8
+    patterns: ["ppic planning", "ppic plannnig", "ppic plan"],
+    sheetKeyword: "PPIC Planning",
     displayName: "PPIC Planning 生管 文件與",
   },
+
   {
     patterns: ["marketing"],
-    sheetKeyword: "Marketing", // D7
+    sheetKeyword: "Marketing",
     displayName: "Marketing 業務",
   },
+
   {
     patterns: ["purchasing"],
-    sheetKeyword: "Purchasing", // D10
+    sheetKeyword: "Purchasing",
     displayName: "Purchasing 採購",
   },
+
   {
     patterns: [
       "warehouse",
@@ -119,14 +135,14 @@ const DEPT_MAP = [
       "adm warehouse",
       "admin warehouse",
     ],
-    sheetKeyword: "Warehouse", // D11
+    sheetKeyword: "Warehouse",
     displayName: "Warehouse 倉庫",
   },
+
   {
     patterns: [
       "qc",
       "quality control",
-
       "qc finish good",
       "assistant leader qc",
       "qc belah kecil",
@@ -140,11 +156,14 @@ const DEPT_MAP = [
       "qc check claim",
       "adm qc",
     ],
-    sheetKeyword: "QC", // D12
+    sheetKeyword: "QC",
     displayName: "QC 品管",
   },
 
-  // ── Production ─────────────────────────────────────────────
+  /* =========================================================
+   * PRODUSI
+   * =======================================================*/
+
   {
     patterns: [
       "laminating",
@@ -152,9 +171,10 @@ const DEPT_MAP = [
       "kepala shift laminating",
       "kepala shift lamintaing",
     ],
-    sheetKeyword: "Laminating", // D13
+    sheetKeyword: "Laminating",
     displayName: "Laminating 貼合",
   },
+
   {
     patterns: [
       "printing",
@@ -164,41 +184,53 @@ const DEPT_MAP = [
       "adm printing",
       "adm printong",
     ],
-    sheetKeyword: "Printing", // D14
+    sheetKeyword: "Printing",
     displayName: "Printing 印刷",
   },
+
   {
     patterns: ["mixing", "mixong", "leader mixing", "leader mixong"],
-    sheetKeyword: "Mixing", // D15
+    sheetKeyword: "Mixing",
     displayName: "Mixing 配色房",
   },
+
   {
     patterns: ["belah kecil"],
-    sheetKeyword: "Belah Kecil", // D16
+    sheetKeyword: "Belah Kecil",
     displayName: "Belah Kecil 小剖台",
   },
-  {
-    patterns: ["cutting molded", "leader line cutting molded"],
-    sheetKeyword: "Cutting Molded", // D21
-    displayName: "Cutting Molded 大料斬台",
-  },
+
   {
     patterns: [
-      "cutting",
+      "cutting molded",
+      "leader line cutting molded",
+      "assistant kepala shift molded",
+      "asisten kepala shift molded",
+      "adm molded",
+      "kepala shift molded",
+    ],
+    sheetKeyword: "Cutting Molded",
+    displayName: "Cutting Molded 大料斬台",
+  },
 
+  {
+    patterns: [
       "assistant kepala shift cutting",
       "kepala shift cutting",
       "leader line cutting",
       "adm cutting",
+      "cutting",
     ],
-    sheetKeyword: "Cutting 斬台", // D17
+    sheetKeyword: "Cutting 斬台",
     displayName: "Cutting 斬台",
   },
+
   {
     patterns: ["buffing"],
-    sheetKeyword: "Buffing", // D18
+    sheetKeyword: "Buffing",
     displayName: "Buffing 打磨",
   },
+
   {
     patterns: [
       "press molded",
@@ -206,83 +238,80 @@ const DEPT_MAP = [
       "leader line press molded",
       "leader line pres molded",
     ],
-    sheetKeyword: "Press Molded", // D22
+    sheetKeyword: "Press Molded",
     displayName: "Press Molded 模壓",
   },
 
-  // ── D23: Trimming + Embos Automatic + Packing Molded ──────
-  // PENTING: Semua pattern D23 harus pakai sheetKeyword YANG SAMA
-  // supaya tidak saling timpa saat dikirim ke spreadsheet.
-  // Gunakan "Packing Molded" sebagai keyword tunggal karena cell D23
-  // pasti mengandung teks tersebut.
+  // ── D23 gabungan ─────────────────────────────────────────
   {
-    patterns: ["embos automatic", "emboss automatic"],
-    sheetKeyword: "Packing Molded", // D23 ← FIX: dulu "Embos Automatic"
-    displayName:
-      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
-  },
-  {
-    patterns: ["embos", "emboss"],
-    sheetKeyword: "Embos 轉印", // D19
-    displayName: "Embos 轉印",
-  },
-  {
-    patterns: ["packing molded"],
-    sheetKeyword: "Packing Molded", // D23
-    displayName:
-      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
-  },
-  {
-    patterns: ["packing"],
-    sheetKeyword: "Packing 包裝", // D20
-    displayName: "Packing 包裝",
-  },
-  {
-    patterns: ["trimming", "triming"],
-    sheetKeyword: "Packing Molded", // D23
-    displayName:
-      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
-  },
-  {
-    patterns: ["leader line trimming", "leader line triming"],
-    sheetKeyword: "Packing Molded", // D23
-    displayName:
-      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
-  },
-  {
-    patterns: ["molded"],
-    sheetKeyword: "Packing Molded", // D23
-    displayName:
-      "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
-  },
-  {
-    patterns: ["leader line bottom"],
-    sheetKeyword: "Packing Molded", // D23
+    patterns: [
+      "packing molded",
+      "trimming",
+      "triming",
+      "leader line trimming",
+      "leader line triming",
+      "embos automatic",
+      "emboss automatic",
+      "leader line bottom",
+      "molded",
+    ],
+    exclude: ["press molded", "cutting molded"],
+    sheetKeyword: "Trimming",
     displayName:
       "Trimming, Embos Automatic, Packing Molded ( 修邊, 轉印, 包裝)",
   },
 
-  // ── CMY & Development ──────────────────────────────────────
   {
-    patterns: ["cmy scf", "cmyscf", "cmy"],
-    sheetKeyword: "CMY SCF", // D24
+    patterns: ["embos", "emboss"],
+    exclude: ["automatic"],
+    sheetKeyword: "Embos 轉印",
+    displayName: "Embos 轉印",
+  },
+
+  {
+    patterns: ["packing"],
+    exclude: ["molded"],
+    sheetKeyword: "Packing 包裝",
+    displayName: "Packing 包裝",
+  },
+
+  /* =========================================================
+   * CMY & DEVELOPMENT
+   * =======================================================*/
+
+  {
+    patterns: ["cmy scf", "cmyscf", "leader cmy", "leader cmy scf", "cmy"],
+    exclude: ["mekanik"],
+    sheetKeyword: "CMY SCF 超臨界泡沫",
     displayName: "CMY SCF 超臨界泡沫",
   },
+
   {
     patterns: ["development", "pengembangan", "dev"],
-    sheetKeyword: "Development", // D25
+    sheetKeyword: "Development",
     displayName: "Development 開發",
   },
 ];
 
 function getDeptEntry(deptName) {
   if (!deptName) return null;
+
   const lower = deptName.toLowerCase().trim();
+
   for (const entry of DEPT_MAP) {
+    // cek exclude dulu
+    if (entry.exclude && entry.exclude.some((ex) => lower.includes(ex))) {
+      continue;
+    }
+
+    // cek patterns
     for (const pat of entry.patterns) {
-      if (lower.includes(pat)) return entry;
+      if (lower.includes(pat)) {
+        return entry;
+      }
     }
   }
+
   return null;
 }
 
@@ -314,7 +343,14 @@ function normStatus(raw) {
     .replace(/\s+/g, " ")
     .trim();
 
-  if (/izin.*pulang cepat|pulang cepat/.test(r)) return "IZIN_PULANG_CEPAT";
+  if (/izin.*pulang cepat|pulang cepat/.test(r)) {
+    return "IZIN_PULANG_CEPAT";
+  }
+
+  // IZIN MASUK SIANG
+  if (/izin.*masuk siang/.test(r) || /masuk siang/.test(r)) {
+    return "IZIN_MASUK_SIANG";
+  }
 
   if (/\b(sudah masuk|sudah hadir|sudah datang)\b/.test(r)) {
     if (/izin.*siang/.test(r)) return "IZIN_SIANG";
@@ -343,13 +379,23 @@ function normStatus(raw) {
     return "IZIN_TERLAMBAT";
   }
 
-  if (/\bizin\b/.test(r) || /tidak masuk/.test(r)) return "IZIN_TIDAK_MASUK";
+  if (/\bizin\b/.test(r) || /tidak masuk/.test(r)) {
+    return "IZIN_TIDAK_MASUK";
+  }
 
   return "LAIN";
 }
 
 function counted(s) {
-  return ["SAKIT", "ALFA", "CUTI", "IZIN_TIDAK_MASUK"].includes(s);
+  const notCounted = [
+    "MASUK",
+    "IZIN_SIANG",
+    "IZIN_TERLAMBAT",
+    "IZIN_PULANG_CEPAT",
+    "IZIN_MASUK_SIANG",
+  ];
+
+  return !notCounted.includes(s);
 }
 
 function parse(text) {
